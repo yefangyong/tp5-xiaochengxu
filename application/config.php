@@ -29,7 +29,7 @@ return [
     // 注册的根命名空间
     'root_namespace'         => [],
     // 扩展函数文件
-    'extra_file_list'        => [THINK_PATH . 'helper' . EXT],
+    'extra_file_list'        => [THINK_PATH . 'helper'              . EXT],
     // 默认输出类型
     'default_return_type'    => 'html',
     // 默认AJAX 数据返回格式,可选json xml ...
@@ -155,8 +155,8 @@ return [
     'error_message'          => '页面错误！请稍后再试～',
     // 显示错误信息
     'show_error_msg'         => false,
-    // 异常处理handle类 留空使用 \think\exception\Handle
-    'exception_handle'       => '',
+    // 异常处理handle类 留空使用 \think\exception\Handle 自定义异常
+    'exception_handle'       => 'app\lib\exception\ExceptionHandler',
 
     // +----------------------------------------------------------------------
     // | 日志设置
@@ -164,11 +164,11 @@ return [
 
     'log'                    => [
         // 日志记录方式，内置 file socket 支持扩展
-        'type'  => 'File',
+        'type'  => 'test',
         // 日志保存目录
         'path'  => LOG_PATH,
         // 日志记录级别
-        'level' => [],
+        'level' => ['sql'],
     ],
 
     // +----------------------------------------------------------------------
