@@ -13,13 +13,16 @@ namespace app\api\model;
 use think\Db;
 use think\Exception;
 use think\Model;
+use app\api\model\BannerItem;
 
 class Banner extends Model
 {
+    public function items() {
+        return $this->hasMany('BannerItem','banner_id','id');
+    }
     public static function getBannerById($id) {
-        //find 一维数组，只有一条数据，select 二维数组，多条数据
-       $result =  Db::table('banner_item')->where('id='.$id)->find();
-       return $result;
+        $banner = self::with(['items','items.img'])->find($id);
+        return $banner;
 
     }
 }
