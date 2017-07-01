@@ -18,13 +18,11 @@ class IsMustBePostiveInt extends BaseValidate
         'num'=>'in:1,2,3'
     ];
 
-    //自定义函数
-    protected function isPostiveInt($value,$rule = '',$data = '',$filed = '') {
-        if(is_numeric($value) && is_int($value + 0) && is_int($value + 0) >0) {
-            return true;
-        }else{
-            return $filed.'字段不是正整数';
-        }
+    protected $message = [
+        'id'=>'id必须是正整数'
+    ];
 
-    }
+
+
+
 }

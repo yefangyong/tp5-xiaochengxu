@@ -15,8 +15,9 @@ use think\Exception;
 use think\Model;
 use app\api\model\BannerItem;
 
-class Banner extends Model
+class Banner extends BaseModel
 {
+    protected $hidden = ['delete_time','update_time'];
     public function items() {
         return $this->hasMany('BannerItem','banner_id','id');
     }

@@ -9,10 +9,9 @@
 namespace app\api\controller\v1;
 
 
+use app\api\model\Banner as BannerModel;
 use app\api\validate\IsMustBePostiveInt;
 use app\lib\exception\BannerMissException;
-use think\Exception;
-use app\api\model\Banner as BannerModel;
 
 class Banner
 {
@@ -26,12 +25,11 @@ class Banner
     public function getBanner($id) {
         (new IsMustBePostiveInt())->goCheck();
         $banner = BannerModel::getBannerById($id);
-        //隐藏字段
-        $banner->hidden(['delete_time','update_time']);
-        //显示字段
-       // $banner->visible(['id']);
         if(!$banner) {
-            throw new BannerMissException();
+            throw new BannerMissException([
+                'msg' => '请求banner不存在',
+                'errorCode' => 40000
+            ]);
         }
         return $banner;
     }

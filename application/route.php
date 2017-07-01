@@ -11,8 +11,27 @@
 use think\Route;
 //动态注入
 
-Route::rule('路由表达式','路由地址','请求类型','路由参数[数组]','变量规则[数组]');
+//Route::rule('路由表达式','路由地址','请求类型','路由参数[数组]','变量规则[数组]');
 
-Route::get('banner/:id','api/v1.banner/getBanner');
+Route::get('api/:version/banner/:id','api/:version.banner/getBanner');
+
+Route::get('api/:version/theme','api/:version.theme/getSimpleList');
+
+Route::get('api/:version/theme/:id','api/:version.theme/getComplexOne');
 
 
+
+//Route::get('api/:version/product/by_category','api/:version.product/getAllProductByCategoryID');
+//Route::get('api/:version/product/:id','api/:version.product/getOne',[],['id'=>'\d+']);
+//Route::get('api/:version/product/recent','api/:version.product/getRecent');
+
+Route::group('api/:version/product',function(){
+    Route::get('/by_category','api/:version.product/getAllProductByCategoryID');
+    Route::get('/:id','api/:version.product/getOne',[],['id'=>'\d+']);
+    Route::get('/recent','api/:version.product/getRecent');
+});
+
+Route::get('api/:version/category/all','api/:version.category/getAllCategorys');
+
+Route::post('api/:version/token/user','api/:version.user/getToken');
+Route::post('api/:version/address','api/:version.address/createOrUpdateAddress');
