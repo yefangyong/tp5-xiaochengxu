@@ -6,6 +6,6 @@
  * Time: 21:08
  */
 return [
-    'img_prefix'=>'www.problem.com/images',
+    'img_prefix'=>'http://www.problem.com/images',
     'token_expire_in'=>7200
 ];

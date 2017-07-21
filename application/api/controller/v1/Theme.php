@@ -9,11 +9,12 @@
 namespace app\api\controller\v1;
 
 
+use app\api\controller\BaseController;
 use app\api\validate\IDCollection;
 use app\api\validate\IsMustBePostiveInt;
 use app\lib\exception\ThemeException;
 
-class Theme
+class Theme extends BaseController
 {
     /**
      * @url /theme?ids=1,2,3
@@ -41,7 +42,7 @@ class Theme
     public function getComplexOne($id) {
         (new IsMustBePostiveInt())->goCheck();
        $result = \app\api\model\Theme::getThemeWithProducts($id);
-       if($result->isEmpty()) {
+       if(!$result) {
            $e = new ThemeException([
                'msg'=>'请求的主题信息不存在'
            ]);

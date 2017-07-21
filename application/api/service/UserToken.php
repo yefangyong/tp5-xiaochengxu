@@ -9,6 +9,7 @@
 namespace app\api\service;
 
 
+use app\lib\enum\ScopeEnum;
 use app\lib\exception\TokenException;
 use app\lib\exception\WxChatException;
 use think\Exception;
@@ -95,7 +96,8 @@ class UserToken extends Token
     private function prepareCacheValue($wxresult,$uid) {
         $CacheValue = $wxresult;
         $CacheValue['uid'] = $uid;
-        $CacheValue['scope'] = 16;
+        //16 普通用户 32 super用户 枚举类型
+        $CacheValue['scope'] = ScopeEnum::user;
         return $CacheValue;
     }
 
