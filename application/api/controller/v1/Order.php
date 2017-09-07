@@ -20,26 +20,12 @@ use app\lib\exception\OrderException;
 
 class Order extends BaseController
 {
-    public function getSnapItemsAttr($value) {
-        if(empty($value)) {
-            return null;
-        }else {
-            return json_decode($value);
-        }
-    }
-
-    public function getUserAddressAttr($value) {
-        if(empty($value)) {
-            return null;
-        }else {
-            return json_decode($value);
-        }
-    }
-
     protected $beforeActionList = [
         'checkExclusiveScope'=>['only'=>'placeOrder'],
         'checkPrimaryScope'=>['only'=>'getOrderDetailById','getSummaryByUser']
     ];
+
+
 
     /**
      * @return array
@@ -51,19 +37,43 @@ class Order extends BaseController
         $uid = TokenService::getCurrentUid();
         $status = new OrderService();
         $result = $status->place($uid,$products);
-        return $result;
+        die(json_encode($result));
     }
 
     /***
      * @param int $page
      * @param int $size
      * @return array
-     * 获取订单的概要信息
+     * 根据用户获取订单的概要信息
      */
     public function getSummaryByUser($page = 1,$size = 15) {
         (new PagingParameter())->goCheck();
         $uid = TokenService::getCurrentUid();
         $pagingOrders = OrderModel::getSummaryByUser($uid,$page,$size);
+        if($pagingOrders->isEmpty()) {
+            return [
+                'data'=>[],
+                'current_page'=>$pagingOrders->currentPage()
+            ];
+        }
+        $data = $pagingOrders->hidden(['snap_items','snap_address','prepay_id'])->toArray();
+        return [
+            'data'=>$data,
+            'current_page'=>$pagingOrders->currentPage()
+        ];
+    }
+
+
+
+    /**
+     * @param int $page
+     * @param int $size
+     * @return array
+     * 获取订单的简要信息
+     */
+    public function getSummary($page = 1,$size = 15) {
+        (new PagingParameter())->goCheck();
+        $pagingOrders = OrderModel::getSummary($page,$size);
         if($pagingOrders->isEmpty()) {
             return [
                 'data'=>[],
@@ -89,7 +99,7 @@ class Order extends BaseController
         if(!$order){
             throw new OrderException();
         }else {
-            return $order->hidden('prepay_id')->toArray();
+            return $order->toArray();
         }
     }
 }

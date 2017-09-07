@@ -18,6 +18,7 @@ use think\Exception;
 use think\Loader;
 use think\Log;
 
+
 Loader::import('WxPay.WxPay',EXTEND_PATH,'.Api.php');
 class Pay
 {
@@ -62,10 +63,13 @@ class Pay
 
     private function getPaySignature($wxOrderData) {
         $wxOrder = \WxPayApi::unifiedOrder($wxOrderData);
-        if($wxOrder['result_code']!='SUCCESS' || $wxOrder['return_code']!='SUCCESS') {
+        if($wxOrder['return_code']!='SUCCESS') {
             //记录日志
             Log::record($wxOrder,'error');
             Log::record('获取预订单支付接口失败','error');
+            return [
+                'msg'=>'请查看系统日志'
+            ];
         }
         $this->recordPreOrder($wxOrder);
         return $this->sign($wxOrder);

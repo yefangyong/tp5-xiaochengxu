@@ -13,6 +13,22 @@ class Order extends BaseModel
 {
     protected $autoWriteTimestamp = true;
 
+
+    public function getSnapItemsAttr($value) {
+        if(empty($value)) {
+            return null;
+        }else {
+            return json_decode($value);
+        }
+    }
+
+    public function getSnapAddressAttr($value) {
+        if(empty($value)) {
+            return null;
+        }else {
+            return json_decode($value);
+        }
+    }
     /**
      * @param $uid
      * @param int $page
@@ -23,6 +39,17 @@ class Order extends BaseModel
     public static function getSummaryByUser($uid,$page=1,$size=15) {
         $result = self::where('user_id','=',$uid)->order('create_time desc')
             ->paginate($size,false,['page'=>$page]);
+        return $result;
+    }
+
+    /**
+     * @param $page
+     * @param $size
+     * @return \think\Paginator
+     * 获取订单的简要信息
+     */
+    public static function getSummary($page,$size) {
+        $result = self::order('create_time desc')->paginate($size,false,['page'=>$page]);
         return $result;
     }
 }

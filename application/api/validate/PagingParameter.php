@@ -13,7 +13,7 @@ class PagingParameter extends BaseValidate
 {
     protected $rule = [
         'page'=>'require|isPostiveInt',
-        'size'=>'require|isPostiveInt'
+        'size'=>'isPostiveInt'
     ];
 
     protected $message = [

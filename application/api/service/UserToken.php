@@ -41,7 +41,7 @@ class UserToken extends Token
         if(empty($wxresult)) {
             throw new Exception('获取session_key和openid异常，微信内部错误');
         }else {
-            $loginFail = array_key_exists('errorCode',$wxresult);
+            $loginFail = array_key_exists('errcode',$wxresult);
             if($loginFail) {
                 $this->processLoginError($wxresult);
             }else {

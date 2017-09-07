@@ -89,7 +89,6 @@ class Order
             'order_id'=>$orderId,
             'create_time'=>$create_time
         ];
-
     }
 
     /**
@@ -175,7 +174,7 @@ class Order
             if(!$pStatus['haveStock']) {
                 $status['pass'] = false;
             }
-            $status['totalCount']+=$pStatus['count'];
+            $status['totalCount']+=$pStatus['counts'];
             $status['orderPrice']+=$pStatus['totalPrice'];
             array_push($status['pStatusArray'],$pStatus);
         }
@@ -195,8 +194,10 @@ class Order
         $pStatus = [
             'id'=>null,
             'haveStock'=>false,
-            'count'=>0,
+            'counts'=>0,
             'name'=>'',
+            'price'=>0,
+            'main_img_url',
             'totalPrice'=>0
         ];
         for($i = 0;$i<count($products);$i++) {
@@ -212,7 +213,9 @@ class Order
             $product = $products[$pIndex];
             $pStatus['id'] = $product['id'];
             $pStatus['name'] = $product['name'];
-            $pStatus['count'] = $oCount;
+            $pStatus['counts'] = $oCount;
+            $pStatus['main_img_url'] = $product['main_img_url'];
+            $pStatus['price'] = $product['price'];
             $pStatus['totalPrice'] = $oCount*$product['price'];
             if($product['stock']-$oCount>=0) {
                 $pStatus['haveStock'] = true;

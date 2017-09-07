@@ -121,4 +121,18 @@ class Token
             return false;
         }
     }
+
+    /**
+     * @param string $token
+     * @return bool
+     * 验证客户端token的合法性
+     */
+    public static function verifyToken($token = ''){
+        $token = Cache::get($token);
+        if($token) {
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

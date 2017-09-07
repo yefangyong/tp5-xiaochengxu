@@ -11,6 +11,7 @@ namespace app\api\controller\v1;
 
 use app\api\controller\BaseController;
 use app\api\model\User;
+use app\api\model\UserAddress;
 use app\api\service\Token;
 use app\api\validate\AddressNews;
 use app\lib\exception\SuccessMessage;
@@ -19,8 +20,24 @@ use app\lib\exception\UserException;
 class Address extends BaseController
 {
     protected $beforeActionList = [
-        'checkPrimaryScope'=>['only'=>'createOrUpdateAddress']
+        'checkPrimaryScope'=>['only'=>'createOrUpdateAddress,getAddress']
     ];
+
+    /**
+     * @return null|static
+     * 获取用户的地址信息
+     */
+    public function getAddress() {
+        $uid = Token::getCurrentUid();
+        $userAddress = UserAddress::where('user_id','=',$uid)->find();
+        if(!$userAddress) {
+            new UserException([
+                'msg'=>'用户地址不存在',
+                'errorCode'=>600001
+            ]);
+        }
+        return $userAddress;
+    }
 
     /**
      * @return SuccessMessage
