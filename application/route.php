@@ -40,6 +40,8 @@ Route::post('api/:version/token/verify','api/:version.token/verifyToken');
 Route::post('api/:version/token/app','api/:version.token/getAppToken');
 
 //Address
+Route::get('api/:version/address/ems','api/:version.address/getEmsData');
+Route::get('api/:version/address/sendCode','api/:version.address/sendCode');
 Route::post('api/:version/address','api/:version.address/createOrUpdateAddress');
 Route::get('api/:version/address','api/:version.address/getAddress');
 Route::post('api/:version/address/getAccess','api/:version.address/getAccess');
@@ -52,4 +54,5 @@ Route::get('api/:version/order/paginate','api/:version.order/getSummary');
 
 //pay
 Route::post('api/:version/pay/pre_order','api/:version.pay/getPreOrder');
+Route::post('api/:version/pay/notify','api/:version.pay/receiveNotify');
 

@@ -40,6 +40,46 @@ class Address extends BaseController
     }
 
     /**
+     * 获取快递的信息
+     */
+    public function getEmsData() {
+        $type = 'zhongtong';
+        $openId = '463675727356';
+        $url = "https://www.kuaidi100.com/query?type=".$type."&postid=".$openId;
+        $arr = json_decode(curl_get($url),true);
+        echo '快递单号：'.$openId.'<br/>';
+        foreach ($arr['data'] as $k=>$v) {
+            if($k == 0) {
+                echo "<span style='color: red'>".$v['time'].'&emsp;'.$v['context'].'&emsp;'.$v['location']."</span><br/>";
+            }else {
+               echo "<span>".$v['time'].'&emsp;'.$v['context'].'&emsp;'.$v['location']."</span><br/>";
+            }
+        }
+    }
+
+    /**
+     *短信验证码的功能
+     */
+    public function sendCode() {
+        $mobile = '13053112897';
+        $tpl_id = 53036;
+        $key = '98cfbf52a2ef191424ff071f4ae1615b';
+        $url = "http://v.juhe.cn/sms/send?mobile=".$mobile."&tpl_id=".$tpl_id."&key=".$key."&tpl_value=";
+        $code = rand(1000,9999);
+        $str = '#code#='.$code;
+        $str = urlencode($str);
+        $url = $url.$str;
+        $arr = json_decode(curl_get($url),true);
+        if($arr['error_code'] == 0) {
+            echo '发送成功';
+        }else {
+            echo '发送失败';
+        }
+    }
+
+
+
+    /**
      * @return SuccessMessage
      * @throws UserException
      * 新增或者更新用户收获地址

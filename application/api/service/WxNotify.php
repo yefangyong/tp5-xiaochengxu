@@ -22,30 +22,30 @@ class WxNotify extends \WxPayNotify
 {
     public function NotifyProcess($data, &$msg)
     {
-        if($data['result_code'] == 'SUCCESS') {
+        if($data['return_code'] == 'SUCCESS') {
             $orderno = $data['out_trade_no'];
             //用事务，防止多次减少了库存量,一个执行单元，
             Db::startTrans();
             try {
-                $order = OrderModel::where('order_no','=',$orderno)->lock(true)->find();
-                if($order['status'] == 1) {
+                $order = OrderModel::where('order_no', '=', $orderno)->lock(true)->find();
+                if ($order['status'] == 1) {
                     $service = new OrderService();
                     $stockStatus = $service->checkOrderStock($order->id);
-                    if($stockStatus['pass']) {
-                        $this->updateStockStatus($order->id,true);
+                    if ($stockStatus['pass']) {
+                        $this->updateStockStatus($order->id, true);
                         $this->reduceStock($stockStatus);
-                    }else {
-                        $this->updateStockStatus($order->id,false);
+                    } else {
+                        $this->updateStockStatus($order->id, false);
                     }
                 }
                 Db::commit();
                 return true;
-            }catch(Exception $ex) {
+            }catch (Exception $ex) {
                 Db::rollback();
                 Log::record($ex);
                 return false;
             }
-        }else {
+        }else{
             return true;
         }
     }
@@ -55,9 +55,9 @@ class WxNotify extends \WxPayNotify
      * 减少库存量
      */
     private function reduceStock($stockStatus) {
-        foreach ($stockStatus['pArrayStatus'] as $pArrayStatus) {
+        foreach ($stockStatus['pStatusArray'] as $pArrayStatus) {
             $product_id = $pArrayStatus['id'];
-            $count = $pArrayStatus['count'];
+            $count = $pArrayStatus['counts'];
             Product::where('id','=',$product_id)->setDec('stock',$count);
         }
     }

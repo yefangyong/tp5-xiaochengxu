@@ -60,7 +60,7 @@ class Token
     public function getAppToken($ac = '',$se = '') {
         (new AppTokenGet())->goCheck();
         $token = new AppToken();
-        $token = $token->get($ac,$se);
+        $token->get($ac,$se);
         if($token) {
             return [
                 'token'=>$token

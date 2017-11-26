@@ -28,7 +28,6 @@ function curl_get($url,&$httpCode = 0) {
     curl_close($curl);
     return $file_contents;
 }
-
 /**
  * @param $length
  * @return string

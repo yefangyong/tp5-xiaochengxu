@@ -25,8 +25,6 @@ class Order extends BaseController
         'checkPrimaryScope'=>['only'=>'getOrderDetailById','getSummaryByUser']
     ];
 
-
-
     /**
      * @return array
      * 下单接口
@@ -37,7 +35,7 @@ class Order extends BaseController
         $uid = TokenService::getCurrentUid();
         $status = new OrderService();
         $result = $status->place($uid,$products);
-        die(json_encode($result));
+        return $result;
     }
 
     /***

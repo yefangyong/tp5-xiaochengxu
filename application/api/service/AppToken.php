@@ -52,7 +52,7 @@ class AppToken extends Token
         $result = cache($token,json_encode($value),$expire_in);
         if(!$result) {
             new TokenException([
-                'msg'=>'缓存服务异常',
+                'msg'=>'缓存服务一场',
                 'errorCode'=>10005
             ]);
         }

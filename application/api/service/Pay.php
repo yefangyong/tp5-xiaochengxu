@@ -18,7 +18,6 @@ use think\Exception;
 use think\Loader;
 use think\Log;
 
-
 Loader::import('WxPay.WxPay',EXTEND_PATH,'.Api.php');
 class Pay
 {
@@ -57,7 +56,7 @@ class Pay
         $wxOrderData->SetTotal_fee($totalPrice*100);
         $wxOrderData->SetBody('零食小铺');
         $wxOrderData->SetOpenid($openID);
-        $wxOrderData->SetNotify_url('http://www.qq.com');
+        $wxOrderData->SetNotify_url('https://30166482.qcloud.la/index.php/api/v1/pay/notify');
         return $this->getPaySignature($wxOrderData);
     }
 
@@ -81,17 +80,18 @@ class Pay
      * 获取小程序发起微信支付的参数
      */
     private function sign($wxOrder) {
-        $jsApiData = new \WxPayJsApiPay();
-        $jsApiData->SetAppid(config('wx.app_id'));
-        $jsApiData->SetTimeStamp((string)time());
-        $rand = md5(time().mt_rand(0,1000));
-        $jsApiData->SetNonceStr($rand);
-        $jsApiData->SetPackage('prepay_id='.$wxOrder['prepay_id']);
-        $jsApiData->GetSignType('md5');
-        $sign = $jsApiData->MakeSign();
-        $rawData = $jsApiData->GetValues();
-        $rawData['paySign'] = $sign;
-        return $rawData;
+        $jsApiPayData = new \WxPayJsApiPay();
+        $jsApiPayData->SetAppid(config('wx.app_id'));
+        $jsApiPayData->SetTimeStamp((string)time());
+        $rand = md5(time() . mt_rand(0, 1000));
+        $jsApiPayData->SetNonceStr($rand);
+        $jsApiPayData->SetPackage('prepay_id=' . $wxOrder['prepay_id']);
+        $jsApiPayData->SetSignType('md5');
+        $sign = $jsApiPayData->MakeSign();
+        $rawValues = $jsApiPayData->GetValues();
+        $rawValues['paySign'] = $sign;
+        unset($rawValues['appId']);
+        return $rawValues;
 
     }
 
